@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/subreddit-browser/static/css/main.93c41990.css",
-    "main.js": "/subreddit-browser/static/js/main.d3a34e19.js",
+    "main.css": "/subreddit-browser/static/css/main.577f1b15.css",
+    "main.js": "/subreddit-browser/static/js/main.facc15b3.js",
     "index.html": "/subreddit-browser/index.html",
-    "main.93c41990.css.map": "/subreddit-browser/static/css/main.93c41990.css.map",
-    "main.d3a34e19.js.map": "/subreddit-browser/static/js/main.d3a34e19.js.map"
+    "main.577f1b15.css.map": "/subreddit-browser/static/css/main.577f1b15.css.map",
+    "main.facc15b3.js.map": "/subreddit-browser/static/js/main.facc15b3.js.map"
   },
   "entrypoints": [
-    "static/css/main.93c41990.css",
-    "static/js/main.d3a34e19.js"
+    "static/css/main.577f1b15.css",
+    "static/js/main.facc15b3.js"
   ]
 }
