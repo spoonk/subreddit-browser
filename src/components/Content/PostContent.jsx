@@ -21,7 +21,7 @@ const Content = ({query, queryParams}) => {
 
     const getInitialData = () => {
         console.log("fetching more ");
-        const route = `http://www.reddit.com${query}.json?${queryParams}`;
+        const route = `https://www.reddit.com${query}.json?${queryParams}`;
         console.log(route);
         fetch(route)
             .then((res) => {
@@ -44,7 +44,7 @@ const Content = ({query, queryParams}) => {
         clearTimeout(timeout.current)
         timeout.current = setTimeout(() => {
             fetching = true;
-            const route = `http://www.reddit.com${query}.json?${queryParams}&after=${after}`;
+            const route = `https://www.reddit.com${query}.json?${queryParams}&after=${after}`;
             fetch(route)
                 .then((res) => {
                     res.json().then(data => {
@@ -122,7 +122,7 @@ const Content = ({query, queryParams}) => {
             })}
             </MasonryInfiniteGrid>
         }
-        {error && <div className="error-fetching">error fetching content, your query may be invalid. Make sure it is of the form "/r/subreddit"</div>}
+        {error && <div className="error-fetching">Error fetching content, your query may be invalid. Make sure it is of the form "/r/subreddit"</div>}
         {!error &&  posts.length !== 0 && !noMorePosts && <button className="getMore" onClick={!fetching ? getMorePostData : () => {}} >load more posts</button>}
 
         {postToggled && 
@@ -133,9 +133,6 @@ const Content = ({query, queryParams}) => {
             queryParams={queryParams}
           />
         }
-
-
-
     </div>
   )
 }

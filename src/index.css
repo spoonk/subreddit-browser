@@ -177,6 +177,7 @@ input[type=text]:focus{
   align-content: center;
   align-items: center;
   flex-wrap: wrap;
+  min-height:100vh;
 }
 .post{
   background-color: #242424;
@@ -278,9 +279,10 @@ iframe {
   justify-content: center;
   align-content: center;
   flex-direction: column;
-  position: absolute;
+  position: relative;
+  width:50%;
   top:50%;
-  transform: translate(0, -50%);
+  /* transform: translate(0, -50%); */
   border-radius: 5px;
 }
 

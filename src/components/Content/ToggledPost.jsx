@@ -15,7 +15,7 @@ const ToggledPost = ({toggle, data, query, queryParams}) => {
   }, [])
 
   const getComments = () => {
-        const route = `http://www.reddit.com/r/${data.subreddit}/comments/${data.id}.json`;
+        const route = `https://www.reddit.com/r/${data.subreddit}/comments/${data.id}.json`;
         fetch(route)
             .then((res) => {
                 res.json().then(data => {

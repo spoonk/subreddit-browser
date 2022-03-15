@@ -29,7 +29,7 @@ const Post = ({ data, togglePost }) => {
               {nsfw && !data.is_self && <div className="nsfw">Sorry, I'm not showing you nsfw content. Too bad!</div>}
 
               </div>
-            <h1>{data.post_hint}</h1>
+            {/* <h1>{data.post_hint}</h1>  */}
       </div>
     )
 }
