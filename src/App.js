@@ -1,24 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import Search from "./components/Search/Search";
+import Content from "./components/Content/PostContent";
+import { useState } from "react";
+import { BrowserRouter as Router, Route, Switch, useParams} from 'react-router-dom';
+
 
 function App() {
+  const [queryString, setQuery] = useState("/r/udub");
+  const [queryParams, setQP] = useState("t=week");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Search
+          initialSR = {queryString}
+          update = {(q, p) => {
+            setQuery(q);
+            setQP(p);
+          }}
+        />
+        <Content
+          query={queryString}
+          queryParams={queryParams}
+        />
+        {/* <h1>{`${queryString}?${queryParams}`}</h1> */}
+      </div>
+    </Router>
   );
 }
 
