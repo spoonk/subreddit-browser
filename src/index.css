@@ -181,13 +181,16 @@ input[type=text]:focus{
 }
 .post{
   background-color: #242424;
+  position: relative;
   margin-top:40px;
   border-radius: 5px;
-  /* width:550px; */
   width:33%;
-  min-width: 400px;
+  /* width:550px; */
+  /* width:400px;
+  width:400px; */
+  /* width:50%; */
+  /* min-width: 400px; */
   padding: 30px 30px 30px 30px;
-  position: relative;
 }
 .post-divider{
 
@@ -287,8 +290,10 @@ iframe {
 }
 
 .grid{
-  width:60%;
-  /* display: flex; */
+  max-width:100%;
+  position: relative;
+  display: flex;
+  width:1300px;
 }
 
 .toggled-post-container{

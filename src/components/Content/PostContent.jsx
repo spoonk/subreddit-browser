@@ -13,11 +13,36 @@ const Content = ({query, queryParams}) => {
     const [postToggled, setPT] = useState(null);
     var fetching = false;
     const timeout = useRef();
+    const [cols, scol] = useState(1);
 
 
     useEffect(() => {
         getInitialData();
+        function handleResize() {
+            const width = window.innerWidth;
+            console.log(width);
+            if (width > 2000) {
+                // cols.current = 4;
+                scol(4);
+            console.log(cols)
+            } else if (width > 1000) {
+                // cols.current = 2;
+                scol(2)
+                console.log(cols)
+            } else if (width > 300) {
+                // cols.current = 1;
+                scol(1)
+                console.log(cols)
+            }
+          }
+          window.addEventListener("resize", handleResize);
+
     }, [query, queryParams])
+
+
+    window.onresize = () => {
+
+    }
 
     const getInitialData = () => {
         console.log("fetching more ");
@@ -104,6 +129,9 @@ const Content = ({query, queryParams}) => {
 
     
   return (
+    //   https://github.com/naver/egjs-infinitegrid/wiki/react-infinitegrid-API-documentation
+    // https://naver.github.io/egjs-grid/storybook/?path=/story/introduction--page
+    // https://naver.github.io/egjs-grid/release/latest/doc/Grid.MasonryGrid.html#columnSize
     <div id="content">
         {/* {posts.length !== 0 && !error && posts.map(postData => { */}
             {/* return <Post key={postData.name} data={postData} /> */}
@@ -113,8 +141,18 @@ const Content = ({query, queryParams}) => {
                 className="grid"
                 gap={15}
                 column={3}
-                // isConstantSize={true}
-                useFirstRender={false}
+                useFirstRender={true}
+                isOverflowScroll={true}
+                transitionDuration={0.2}
+                isConstantSize={false}
+                columnSize={400}
+                resizeDebounce={0}
+                options={{
+                    columnSize:400,
+                    align:"stretch",
+                    useFirstRender:true
+                }}
+                // useFirstRender={false}
                 
             >
             {posts.map(postData => {

@@ -10,11 +10,11 @@ const Comment = ({ data }) => {
     <div className="comment">
         <div className="author">{"u/"+data.author}</div>
         <ReactMarkdown className='comment-text'>{data.body}</ReactMarkdown>
-        <div className={data.score > 0 ? "ups good" : "ups bad"} >{data.score}</div>
-        {
+        <div className={data.score >= 0 ? "ups good" : "ups bad"} >{data.score}</div>
+        {/* {
             data.replies && 
             <div className="comment">dkdkdk</div>
-        }
+        } */}
     </div>
   )
 }
