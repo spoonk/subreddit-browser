@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import Post from "./Post";
 import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
-import { Container } from "react-bootstrap";
 import ToggledPost from "./ToggledPost";
 
 
@@ -13,30 +12,10 @@ const Content = ({query, queryParams}) => {
     const [postToggled, setPT] = useState(null);
     var fetching = false;
     const timeout = useRef();
-    const [cols, scol] = useState(1);
 
 
     useEffect(() => {
         getInitialData();
-        function handleResize() {
-            const width = window.innerWidth;
-            console.log(width);
-            if (width > 2000) {
-                // cols.current = 4;
-                scol(4);
-            console.log(cols)
-            } else if (width > 1000) {
-                // cols.current = 2;
-                scol(2)
-                console.log(cols)
-            } else if (width > 300) {
-                // cols.current = 1;
-                scol(1)
-                console.log(cols)
-            }
-          }
-          window.addEventListener("resize", handleResize);
-
     }, [query, queryParams])
 
 
@@ -45,9 +24,7 @@ const Content = ({query, queryParams}) => {
     }
 
     const getInitialData = () => {
-        console.log("fetching more ");
         const route = `https://www.reddit.com${query}.json?${queryParams}`;
-        console.log(route);
         fetch(route)
             .then((res) => {
                 res.json().then(data => {
@@ -142,8 +119,8 @@ const Content = ({query, queryParams}) => {
                 gap={15}
                 column={3}
                 useFirstRender={true}
-                isOverflowScroll={true}
-                transitionDuration={0.2}
+                // isOverflowScroll={true}
+                transitionduration={0.2}
                 isConstantSize={false}
                 columnSize={400}
                 resizeDebounce={0}

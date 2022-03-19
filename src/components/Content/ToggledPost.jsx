@@ -2,16 +2,17 @@ import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
 import Comment from "./Comment";
 
-const ToggledPost = ({toggle, data, query, queryParams}) => {
+const ToggledPost = ({toggle, data}) => {
   const [comments, sCom] = useState(null)
   const selftext = data.selftext;
   const preview = data.preview ? data.preview["images"][0]["resolutions"][0] : null;
   const image = data.post_hint === "image" ? data.url : null;
-  const video = data.post_hint === "rich:video" ? data.secure_media.oembed : null;
+  const video = (data.post_hint === "rich:video" || data.post_hint === "hosted:video") ? data.secure_media.oembed : null;
   const nsfw = data.over_18;
 
   useEffect(() => {
     getComments();
+    console.log(data)
   }, [])
 
   const getComments = () => {
@@ -19,7 +20,8 @@ const ToggledPost = ({toggle, data, query, queryParams}) => {
         fetch(route)
             .then((res) => {
                 res.json().then(data => {
-                    data = processComments(data);
+                    data = data[1].data
+                    sCom(data.children);
                     // setPosts(data);
                     // setError(false);
                 }).catch(err => {
@@ -32,29 +34,11 @@ const ToggledPost = ({toggle, data, query, queryParams}) => {
             })
   }
 
-  const processComments = (commentdata) => {
-    commentdata = commentdata[1].data
-    var comments = commentdata.children.map(data => {
-      data = data.data
-      return {
-        author: data["author"],
-        author_flair_color: data["author_flair_background_color"],
-        author_flair_text: data["author_flair_text"],
-        author_flair_text_color: data["author_flair_text_color"],
-        body: data["body"],
-        created_time_utc: data["created_utc"],
-        id: data["id"],
-        replies: data["replies"],
-        score: data["score"],
-        ups: data["ups"],
-        downs: data["downs"]
-      }
-    })
-    sCom(comments);
-  } 
+
 
   return (
-    <div className="toggled-post-container" onClick={() => toggle(null)}>
+    <>
+    <div className="toggled-post-container" onClick={(e) => {if (e.target.className==="toggled-post-container") toggle(null);}}>
         <div className="toggled-post">
         <div className="post-author post-text">{"u/"+data.author}</div>
                 <div className="post-title post-text" >
@@ -67,8 +51,8 @@ const ToggledPost = ({toggle, data, query, queryParams}) => {
                     {data.is_self && <div className="selftext" markdown="1">
                     <ReactMarkdown className="md">{selftext}</ReactMarkdown> 
                     </div>}
-                    {!image  && preview && <img className="img-toggled" src={preview.url.replaceAll("&amp;", "&")} alt=""></img>}
-                    {image && <img className="img-toggled" src={data.url.replaceAll("&amp;", "&")} alt = "" />}
+                    {!image && !video && preview && <img className="img-toggled" src={preview.url.replaceAll("&amp;", "&")} alt=""></img>}
+                    {image && !video && <img className="img-toggled" src={data.url.replaceAll("&amp;", "&")} alt = "" />}
                     {video && <div className="video" dangerouslySetInnerHTML={{__html: video.html.replaceAll("&lt;", "<").replaceAll("&gt;", ">")}}></div>}
                   </>
                 }
@@ -77,18 +61,19 @@ const ToggledPost = ({toggle, data, query, queryParams}) => {
               </div>
             {/* <h1>{data.post_hint}</h1> */}
             <div className="comments">
-              {comments && comments.length !== 0&& <>
+              {comments && comments.length !== 0 && <>
               <hr></hr>
               <h2>Comments</h2>    
                 {comments.map(comment => {
-                  return <Comment key={comment.id} data={comment} />
+                  return <Comment data={comment} key={comment.data.id} />
                 })}
 
                 </>
               }
             </div>
         </div>
-    </div>
+        </div>
+        </>
   )
 }
 
