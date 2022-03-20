@@ -1,41 +1,68 @@
 import ReactMarkdown from 'react-markdown'
+import { useEffect, useState, useRef } from 'react';
 
 const Post = ({ data, togglePost }) => {
-    const selftext = data.selftext;
-    const preview = data.preview ? data.preview["images"][0]["resolutions"][0] : null;
-    const image = data.post_hint === "image" ? data.url : null;
-    // const video = data.post_hint === "rich:video" ? data.secure_media.oembed : null;
-    const video = (data.post_hint === "rich:video" || data.post_hint === "hosted:video") ? data.secure_media.reddit_video : null;
+  const nsfw = data.over_18;
+  const selftext = data.selftext;
+
+  const preview = data.preview ? data.preview["images"][0]["resolutions"][0] : null;
+  const image = data.post_hint === "image" ? data.url : null;
+
+  const hostedvideo = (data.post_hint === "hosted:video") ? data.secure_media.reddit_video : null;
+  const richvideo = (data.post_hint === "rich:video") ? data.secure_media.oembed : null;
+  const video = hostedvideo || richvideo;
+  const [vidLoaded, setVL] = useState(null);
+
+  const link = data.post_hint === "link" ? data.url : null;
+  const vidRef = useRef(null);
+  var vid = useRef(null);
 
 
+  // audio for a reddit hosted video is at https://v.redd.it/VIDEO_ID/DASH_audio.mp4
+    // and I need to somehow make a custom video player to merge this sound with the video . . . . . ..  .. . . . 
+    //  oh crap!
+  // https://stackoverflow.com/questions/20203604/how-to-mix-in-audio-to-html5-video
+  useEffect(() => {
+    if (video){
+      if (richvideo){
+        vid.current = <div className='video' dangerouslySetInnerHTML={{__html: video.html.replaceAll("&lt;", "<").replaceAll("&gt;", ">")}}></div>
+        setVL(true);
+      } else if (hostedvideo){
+        vid.current = (<video ref={vidRef} autoPlay={true} controls={true}><source src={hostedvideo.fallback_url}></source></video>)
+        setVL(true);
+      }
+    }
+  }, [])
 
-    const nsfw = data.over_18;
+  return (
+    <div className="post" onClick={() => togglePost(data)}>
+      <div className="post-subreddit post-text">{"r/"+data.subreddit}</div>
+        <div className="post-title post-text" >
+          <span className={data.upvote_ratio > 0.5 ? "ups bad" : "ups good"}>{data.ups - data.downs}</span> {data.title}
+        </div>
+      <div className="post-author post-text">{"u/"+data.author}</div>
+      <div className="post-content">
+        {!nsfw && 
+          <>
+            {/* text post */}
+            {data.is_self && <div className="selftext" markdown="1"><ReactMarkdown>{selftext}</ReactMarkdown> </div>}
+            {/* image post */}
+            {image && !video && <img className="post-img" src={data.url.replaceAll("&amp;", "&")} alt = "" />}
+            {/* link post */}
 
-    return (
-      <div className="post" onClick={() => togglePost(data)}>
-              <div className="post-author post-text">{"u/"+data.author}</div>
-                <div className="post-title post-text" >
-                  <span className={data.upvote_ratio > 0.5 ? "ups bad" : "ups good"}>{data.ups - data.downs}</span> {data.title}
-                </div>
-              <div className="post-subreddit post-text">{"r/"+data.subreddit}</div>
-              <div className="post-content">
-                {!nsfw && 
-                  <>
-                    {data.is_self && <div className="selftext" markdown="1">
-                    <ReactMarkdown>{selftext}</ReactMarkdown> 
-                    </div>}
-                    {!image  && preview && <img className="post-img" src={preview.url.replaceAll("&amp;", "&")} alt=""></img>}
-                    {image && !video && <img className="post-img" src={data.url.replaceAll("&amp;", "&")} alt = "" />}
-                    {/* {video && <div className="video" dangerouslySetInnerHTML={{__html: video.fallback_url.replaceAll("&lt;", "<").replaceAll("&gt;", ">")}}></div>} */}
-                    {video && <video autoPlay="true" controls="true" muted="false"><source src={video.fallback_url.replaceAll("&lt;", "<").replaceAll("&gt;", ">")} type="video/mp4"></source>   </video>}
-                  </>
-                }
-              {nsfw && !data.is_self && <div className="nsfw">Sorry, I'm not showing you nsfw content. Too bad!</div>}
+            {/* video post */}
+            {(!image && video && preview) && <>
+                {vidLoaded ? vid.current:<img className="post-img" src={preview.url.replaceAll("&amp;", "&")} alt=""></img>}
+              </>
+            }
 
-              </div>
-            {/* <h1>{data.post_hint}</h1>  */}
+          </>
+        }
+      {nsfw && !data.is_self && <div className="nsfw">Sorry, I'm not showing you nsfw content. Too bad!</div>}
+
       </div>
-    )
+    <h1>{data.post_hint}</h1> 
+  </div>)
 }
 
 export default Post 

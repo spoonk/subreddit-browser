@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import Post from "./Post";
-import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
+import { MasonryInfiniteGrid, PackingInfiniteGrid } from "@egjs/react-infinitegrid";
 import ToggledPost from "./ToggledPost";
 
 
@@ -116,21 +116,8 @@ const Content = ({query, queryParams}) => {
         {posts.length !== 0 && !error &&
             <MasonryInfiniteGrid
                 className="grid"
-                gap={15}
-                column={3}
-                useFirstRender={true}
-                // isOverflowScroll={true}
-                transitionduration={0.2}
-                isConstantSize={false}
-                columnSize={400}
-                resizeDebounce={0}
-                options={{
-                    columnSize:400,
-                    align:"stretch",
-                    useFirstRender:true
-                }}
-                // useFirstRender={false}
-                
+                gap={8}
+                align={"center"}
             >
             {posts.map(postData => {
                 return <Post key={postData.name} data={postData} togglePost={setPT}/>

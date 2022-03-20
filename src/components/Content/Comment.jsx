@@ -12,14 +12,19 @@ const Comment = ({ data }) => {
       is_op: data.is_submitter,
       created_utc: data.created_utc,
       score: data.score,
-      replies: data.replies
+      replies: data.replies,
+      ups: data.ups,
+      downs: data.downs
     }
     return data;
   }
 
+
+  const isMore = data.kind === "more";
   data = processCommentData(data);
-  const replies = data.replies === "" ? null : data.replies.data;
-    
+  const replies = (isMore || data.replies === "" ) ? null : data.replies.data;
+
+
   return (
     <div className="comment" key={data.id}>
         <div className="author">
@@ -27,10 +32,10 @@ const Comment = ({ data }) => {
           {"u/"+data.author}
         </div>
         <ReactMarkdown className='comment-text'>{data.body}</ReactMarkdown>
-        <div className={data.score >= 0 ? "ups good" : "ups bad"} >{data.score}</div>
+        {data.score !== 1 && <div className={data.score >= 0 ? "ups good" : "ups bad"} >{data.ups - data.downs}</div>}
             {replies && 
               replies.children.map(reply => {
-                return <Comment data={reply} key={reply.data.id} />
+                return reply.kind === "more" ? <div className='more'>load more comments</div>: <Comment data={reply} key={reply.data.id} />
               })
             }
     </div>

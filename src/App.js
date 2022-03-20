@@ -22,7 +22,6 @@ function App() {
           query={queryString}
           queryParams={queryParams}
         />
-        {/* <h1>{`${queryString}?${queryParams}`}</h1> */}
       </div>
     </Router>
   );
