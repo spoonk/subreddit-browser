@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import Post from "./Post";
-import { MasonryInfiniteGrid, PackingInfiniteGrid } from "@egjs/react-infinitegrid";
+import { GridLayout } from "@egjs/react-infinitegrid";
+
 import ToggledPost from "./ToggledPost";
 
 
@@ -10,7 +11,7 @@ const Content = ({query, queryParams}) => {
     const [after, setAfter] = useState(null);
     const [noMorePosts, setNMP] = useState(false);
     const [postToggled, setPT] = useState(null);
-    var fetching = false;
+    const [loading, setLoading] = useState(false);
     const timeout = useRef();
 
 
@@ -45,7 +46,7 @@ const Content = ({query, queryParams}) => {
     const getMorePostData = () => {
         clearTimeout(timeout.current)
         timeout.current = setTimeout(() => {
-            fetching = true;
+            setLoading(true);
             const route = `https://www.reddit.com${query}.json?${queryParams}&after=${after}`;
             fetch(route)
                 .then((res) => {
@@ -54,16 +55,16 @@ const Content = ({query, queryParams}) => {
                         data = [...posts, ...data];
                         setPosts(data);
                         setError(false);
-                        fetching = false;
+                        // setLoading(false)
                     }).catch(err => {
                         console.log(err);
                         setError(true);
-                        fetching = false;
+                        setLoading(false);
                     })
                 }).catch((err) => {
                     console.log(err);
                     setError(true);
-                    fetching = false;
+                    setLoading(false);
                 })
         }, 100)
     }
@@ -104,28 +105,29 @@ const Content = ({query, queryParams}) => {
     }
 
 
-    
+
+// https://www.npmjs.com/package/@egjs/react-infinitegrid
   return (
-    //   https://github.com/naver/egjs-infinitegrid/wiki/react-infinitegrid-API-documentation
-    // https://naver.github.io/egjs-grid/storybook/?path=/story/introduction--page
-    // https://naver.github.io/egjs-grid/release/latest/doc/Grid.MasonryGrid.html#columnSize
     <div id="content">
-        {/* {posts.length !== 0 && !error && posts.map(postData => { */}
-            {/* return <Post key={postData.name} data={postData} /> */}
-        {/* })} */}
         {posts.length !== 0 && !error &&
-            <MasonryInfiniteGrid
+            <GridLayout
                 className="grid"
-                gap={8}
-                align={"center"}
+                options={{ isConstantSize: true, transitionDuration: 0.2 }}
+                layoutOptions={{ margin: 10, align: "center" }}
+                onLayoutComplete = {() => {setLoading(false)}}
             >
-            {posts.map(postData => {
-                return <Post key={postData.name} data={postData} togglePost={setPT}/>
-            })}
-            </MasonryInfiniteGrid>
+                {posts.map(postData => {
+                    return <Post key={postData.name} data={postData} togglePost={setPT}/>
+                })}
+            </GridLayout>
         }
         {error && <div className="error-fetching">Error fetching content, your query may be invalid. Make sure it is of the form "/r/subreddit"</div>}
-        {!error &&  posts.length !== 0 && !noMorePosts && <button className="getMore" onClick={!fetching ? getMorePostData : () => {}} >load more posts</button>}
+        {(!error &&  posts.length !== 0 && !noMorePosts) && 
+            !loading ? 
+                <button className="getMore" onClick={!loading ? getMorePostData : () => {}} >load more posts</button>
+                :
+                <div className="getMore loadIndicator"> loading.... </div>
+        }
 
         {postToggled && 
           <ToggledPost 
