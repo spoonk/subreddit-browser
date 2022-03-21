@@ -10,7 +10,11 @@ const Search = ({ update, initialSR  }) => {
     const [trueVal, setTV] = useState(null);
 
     const changeSearch = (e) => {
-        setSR(e.target.value);
+        console.log(e.target.value)
+        var val = e.target.value
+        if (val === "/r") val="/r/"
+        if(val.substring(0,3) !== "/r/") val = "/r/" + val;
+        setSR(val);
         setSugg(true);
     }
 

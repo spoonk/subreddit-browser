@@ -38,7 +38,7 @@ export const processPostData = (data, setNMP, setAfter) => {
             post_hint: l["post_hint"],
             over_18: l["over_18"],
             is_video: l["is_video"],
-            created: l["created"],
+            created_utc: l["created_utc"],
             author: l["author"],
             name: l["name"],
             is_self: l["is_self"],

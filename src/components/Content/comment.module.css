@@ -1,18 +1,33 @@
 .comment{
     margin:10px;
     padding-left:10px;
-    border-left:2px solid #606060
-    
+    border-left:2px solid #606060;
+    overflow-x:scroll;
   }
 .author{
     font-weight: 600;
+    display: flex;
   }
   .op{
     color:aqua;
-    font-weight: bolder;
+    font-weight:600;
+
   }
   .more{
     color: rgba(255,255,255,0.9);
     font-weight: 600;
     filter: blur(0.3px);
+  }
+  .more:hover{
+    cursor: pointer;
+  }
+  .comment-time{
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 100%;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      display: flex;
+      padding-left: 10px;
   }

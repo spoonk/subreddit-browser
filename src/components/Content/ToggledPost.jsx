@@ -5,17 +5,27 @@ import styles from "./post.module.css"
 import Gallery from "./Gallery";
 
 const ToggledPost = ({toggle, data}) => {
-  const [comments, sCom] = useState(null)
+  const nsfw = data.over_18;
   const selftext = data.selftext;
   const preview = data.preview ? data.preview["images"][0]["resolutions"][0] : null;
   const image = data.post_hint === "image" ? data.url : null;
-  const nsfw = data.over_18;
   var hostedvideo = (data.post_hint === "hosted:video") ? data.secure_media.reddit_video : null;
   var richvideo = (data.post_hint === "rich:video") ? data.secure_media.oembed : null;
   var link = (data.post_hint === "link") ? data.url : null;
   var gallery = data.is_gallery;
+  const utc = data.created_utc
+  const [days, setDays] = useState(null)
+  const [hours, setHours] = useState(null)
+  const [minutes, setMinutes] = useState(null)
+
+
+
+
 
   const [galleryContent, setGallery] = useState(gallery)
+
+  const [comments, sCom] = useState(null)
+
 
   const video = (hostedvideo || richvideo) ?
   hostedvideo ?
@@ -27,9 +37,6 @@ const ToggledPost = ({toggle, data}) => {
     :
     <div className='rich-video' dangerouslySetInnerHTML={{__html: richvideo.html.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">")}}></div>
 : null;
-
-
-
 
   useEffect(() => {
     const getComments = () => {
@@ -58,13 +65,39 @@ const ToggledPost = ({toggle, data}) => {
         })
         .catch(e => console.log(e))
     }
-  }, [data])
+    const handleTimes = () => {
+      const now = Math.round(Date.now() / 1000); // reddit measures time in seconds, whereas javascript measures time in milliseconds
+      var diff = now - utc;
+      var days = Math.floor(diff / (60 * 60 * 24));
+      diff -= days * 60 * 60 * 24;
+      var hours = Math.floor(diff / 3600);
+      diff -= hours;
+      var minutes = Math.floor(diff / 60)
+      setDays(days);
+      setHours(hours);
+      setMinutes(minutes)
+    }
+
+    handleTimes();
+  }, [data, gallery, utc])
+  
 
   return (
     <>
     <div className="toggled-post-container" onClick={(e) => {if (e.target.className==="toggled-post-container") toggle(null);}}>
         <div className="toggled-post">
-              <div className={`${styles["post-subreddit"]} ${styles["post-text"]}`}>{"r/"+data.subreddit}</div>
+          <div className={`${styles["post-subreddit"]} ${styles["post-text"]}`}>
+            {"r/"+data.subreddit} 
+            <span style={{fontSize: "8px", paddingLeft:"10px", paddingRight:"10px"}}>●</span>
+            {days >= 1 ? 
+              <div>{days} day{days !== 1 ? "s" : ""} ago</div>
+              :
+              hours >= 1 ? 
+                <div>{hours} hour{hours !== 1 ? "s" : ""} ago</div>
+                :
+                <div>{minutes} minute{minutes !== 1 ? "s" : ""} ago</div>  
+                }
+              </div>
               <div className={`${styles["post-title"]} ${styles["post-text"]}`} >
                 <span className={data.upvote_ratio > 0.5 ? "ups bad" : "ups good"}>{data.ups - data.downs}</span>
                 <ReactMarkdown >{data.title}</ReactMarkdown>
@@ -88,7 +121,7 @@ const ToggledPost = ({toggle, data}) => {
                     </>
                   }
                   {link && 
-                      <a href={data.url} className="post-link" target="_blank">{data.url}</a>
+                      <a href={data.url} className="post-link" target="_blank" rel="noreferrer">{data.url}</a>
                   }
                   { (gallery && (galleryContent === gallery)) && 
                       <img className={styles["post-img"]} style={{opacity: "0", height:"40%"}} src={data.thumbnail.replaceAll("&amp;", "&")} alt = "" />
@@ -109,9 +142,9 @@ const ToggledPost = ({toggle, data}) => {
               <h2>Comments</h2>    
                 {comments.map(comment => {
                   return comment.kind === "more" ? 
-                    <div className='more'>load more comments</div> 
+                    <></>
                     : 
-                    <Comment data={comment} key={comment.data.id} />
+                    <Comment data={comment} key={comment.data.id} parentID={comment.data.id} />
                 })}
                 </>
               }

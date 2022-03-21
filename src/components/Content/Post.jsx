@@ -1,7 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 import styles from './post.module.css'
 import { useEffect, useState } from 'react';
-import Gallery from './Gallery';
 
 const Post = ({ data, togglePost }) => {
   const nsfw = data.over_18;
@@ -12,9 +11,14 @@ const Post = ({ data, togglePost }) => {
   var richvideo = (data.post_hint === "rich:video") ? data.secure_media.oembed : null;
   var link = (data.post_hint === "link") ? data.url : null;
   var gallery = data.is_gallery;
+  const utc = data.created_utc
+  const [days, setDays] = useState(null)
+  const [hours, setHours] = useState(null)
+  const [minutes, setMinutes] = useState(null)
 
-  if(gallery) console.log(data)
-
+// may need to make a special hostedvido component to play audio .... that sounds tricky
+  // explanation: reddit hosted videos don't have any audio, you have to grab it from a separate stream
+// https://v.redd.it/02alxg75i7j51/DASH_audio.mp4
   const video = (hostedvideo || richvideo) ?
         hostedvideo ?
           <div className='rich-video'>
@@ -28,18 +32,42 @@ const Post = ({ data, togglePost }) => {
 
 
   useEffect(() => {
-    
-  }, [])
+    const handleTimes = () => {
+      const now = Math.round(Date.now() / 1000); // reddit measures time in seconds, whereas javascript measures time in milliseconds
+      var diff = now - utc;
+      var days = Math.floor(diff / (60 * 60 * 24));
+      diff -= days * 60 * 60 * 24;
+      var hours = Math.floor(diff / 3600);
+      diff -= hours;
+      var minutes = Math.floor(diff / 60)
+      setDays(days);
+      setHours(hours);
+      setMinutes(minutes)
+    }
+
+    handleTimes();
+  }, [utc])
 
 
   return (
     <div className={styles.post} onClick={() => {togglePost(data)}}>
-      <div className={`${styles["post-subreddit"]} ${styles["post-text"]}`}>{"r/"+data.subreddit}</div>
-        <div className={`${styles["post-title"]} ${styles["post-text"]}`} >
-          <span className={data.upvote_ratio > 0.5 ? "ups bad" : "ups good"}>{data.ups - data.downs}</span>
-          <ReactMarkdown >{data.title}</ReactMarkdown>
-        </div>
-        {gallery && <h3>[gallery]</h3>}
+      <div className={`${styles["post-subreddit"]} ${styles["post-text"]}`}>
+        {"r/"+data.subreddit} 
+        <span style={{fontSize: "4px", paddingLeft:"10px", paddingRight:"10px"}}>●</span>
+        {days >= 1 ? 
+          <div>{days} day{days !== 1 ? "s" : ""} ago</div>
+          :
+          hours >= 1 ? 
+            <div>{hours} hour{hours !== 1 ? "s" : ""} ago</div>
+            :
+            <div>{minutes} minute{minutes !== 1 ? "s" : ""} ago</div>  
+        }
+      </div>
+      <div className={`${styles["post-title"]} ${styles["post-text"]}`} >
+        <span style={{paddingRight: "10px"}} className={data.upvote_ratio > 0.5 ? "ups bad" : "ups good"}>{data.ups - data.downs}</span>
+        {data.title}
+      </div>
+      {gallery && <h3>[gallery]</h3>}
       <div className={`${styles["post-author"]} ${styles["post-text"]}`}>
         {"u/"+data.author}
       </div>
@@ -59,7 +87,7 @@ const Post = ({ data, togglePost }) => {
               </>
             }
             {link && 
-                <a href={data.url} className="post-link" target="_blank">{data.url}</a>
+                <a href={data.url} className="post-link" target="_blank" rel="noreferrer">{data.url}</a>
             }
              { gallery && 
                 <img className={styles["post-img"]}  src={data.thumbnail} alt = "" />

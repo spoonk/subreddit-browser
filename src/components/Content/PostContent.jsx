@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from "react"
 import Post from "./Post";
 import { GridLayout } from "@egjs/react-infinitegrid";
 import { getInitialData, getMorePostData, } from "./contentUtils";
-
+import About from "./About";
+import styles from "./loader.module.css"
 import ToggledPost from "./ToggledPost";
-
 
 const Content = ({query, queryParams}) => {
     const [posts, setPosts] = useState([]);
@@ -14,13 +14,28 @@ const Content = ({query, queryParams}) => {
     const [postToggled, setPT] = useState(null);
     const [loading, setLoading] = useState(false);
     const timeout = useRef();
+    const [aboutInfo, setAbout] = useState(null)
 
     useEffect(() => {
+        setPosts([])
+        setAbout(null)
         getInitialData(query, queryParams, setNMP, setAfter, setPosts, setError);
+        let prefix = query.replaceAll(/(\/hot)*(\/top)*(\/new)*/ig, "");
+        getAbout(prefix)
     }, [query, queryParams])
 
+    const getAbout = (q, qp) => {
+        const route = `https://www.reddit.com${q}/about.json`;
+        fetch(route)
+            .then(res => {
+                res.json().then(about => {
+                    if (!about.error) setAbout(about)
+                })
+                .catch(err => console.log(err))
+            })
+            .catch(err => console.log(err))
+    }
 
-// https://www.npmjs.com/package/@egjs/react-infinitegrid
   return (
     <div id="content">
         {posts.length !== 0 && !error &&
@@ -30,6 +45,9 @@ const Content = ({query, queryParams}) => {
                 layoutOptions={{ margin: 10, align: "center" }}
                 onLayoutComplete = {() => {setLoading(false)}}
             >
+                {aboutInfo && 
+                    <About about={aboutInfo} />
+                }
                 {posts.map(postData => {
                     return <Post key={postData.name} data={postData} togglePost={setPT}/>
                 })}
@@ -43,7 +61,7 @@ const Content = ({query, queryParams}) => {
                     : 
                     () => {}} >load more posts</button>
                 :
-                <div className="getMore loadIndicator"> loading.... </div>
+                <div className="loadIndicator"><div class={styles["lds-roller"]}><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
         }
 
         {postToggled && 

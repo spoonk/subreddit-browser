@@ -76,7 +76,8 @@ input[type=text]:focus{
   width: 100vw;
   z-index:1;
   top:40px;
-  transition: 0.3s;
+  /* transition: 0.3s; */
+  background-color: rgba(0,0,0,0.6);
 }
 #search-container{
   top:0;
@@ -91,6 +92,8 @@ input[type=text]:focus{
   text-align: center;
   border-bottom: 1px solid rgb(36, 253, 152);
   margin: 0px 50px 0px 50px ;
+  cursor: pointer;
+  user-select: none;
 }
 .dd-container{
   width:100%;
@@ -98,11 +101,17 @@ input[type=text]:focus{
   position: absolute;
   height: auto;
   background-color: #242424;
+  cursor: pointer;
+  border: 1px solid gray;
+
 }
+
 .dd-option{
   z-index: 101;
   text-align: center;
   transition: 0.1s;
+  cursor: pointer;
+
 }
 .dd-option:hover{
   background-color: rgb(36, 253, 152);
@@ -170,6 +179,7 @@ input[type=text]:focus{
   align-items: center;
   flex-wrap: wrap;
   min-height:100vh;
+  /* overflow-x: scroll; */
 }
 
 .ups{
@@ -193,6 +203,10 @@ input[type=text]:focus{
   height: 80px;
   border-radius: 5px;
   transition: 0.1s;
+}
+.loadIndicator{
+  margin:80px;
+
 }
 .getMore:hover{
   background-color: rgb(97, 201, 166);
@@ -218,11 +232,8 @@ input[type=text]:focus{
   width:80%;
   position: relative;
   top:100px;
-
-  /* display: flex; */
+  margin-bottom:100px;
   min-width:900px;
-  /* overflow-y: scroll; */
-
 }
 
 .toggled-post-container{
@@ -249,9 +260,11 @@ input[type=text]:focus{
   left:50%;
   transform: translate(-50%,0%);
   background-color: #242424;
-  max-height:100%;
+  /* max-height:100%; */
   overflow: scroll;
-  max-height: 90vh;
+  max-height: 80vh;
+
+
   
   padding:40px;
   z-index: 4;
@@ -266,9 +279,7 @@ hr{
   color: #606060;
 }
 
-
 .img-toggled{
-  /* max-height: 60%; */
   width:100%;
   padding-left: 100px;
   padding-right: 100px;
@@ -283,7 +294,6 @@ video{
   width:100%;
   position: absolute;
   top:0px;
-  /* opacity: 0.8; */
 }
 iframe{
   width:100% !important;
@@ -294,14 +304,22 @@ iframe{
 }
 .gallery-container{
   max-height:60vh !important;
-  /* height: 300px; */
 }
 .gallery-img{
-  /* height: 100%; */
-  /* height: fit-content !important; */
   width:auto !important;
   max-height: 60vh;
 }
 button{
   cursor: pointer;
 }
+.about{
+  background-color: #363636;
+  position: relative;
+  border-radius: 5px;
+  width:400px;
+  padding: 30px 30px 30px 30px;
+  color: rgba(255,255,255,0.96);
+  
+}
+
+
