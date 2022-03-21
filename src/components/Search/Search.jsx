@@ -9,7 +9,6 @@ const Search = ({ update, initialSR  }) => {
     const [suggestions, setSugg] = useState(false);
     const [trueVal, setTV] = useState(null);
 
-
     const changeSearch = (e) => {
         setSR(e.target.value);
         setSugg(true);

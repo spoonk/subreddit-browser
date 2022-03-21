@@ -4,8 +4,6 @@ import { useState } from 'react'
 const SearchDDButton = (  {initialValue, options, select}  ) => {
     const [toggled, toggle] = useState(false);
 
-
-
   return (
     <div className="dropdown-button" onClick={() => toggle(!toggled)}>
         {initialValue}

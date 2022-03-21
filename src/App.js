@@ -1,7 +1,6 @@
 import Search from "./components/Search/Search";
 import Content from "./components/Content/PostContent";
 import { useState } from "react";
-import { BrowserRouter as Router, Route, Switch, useParams} from 'react-router-dom';
 
 
 function App() {
@@ -9,21 +8,19 @@ function App() {
   const [queryParams, setQP] = useState("t=week");
 
   return (
-    <Router>
-      <div className="App">
-        <Search
-          initialSR = {queryString}
-          update = {(q, p) => {
-            setQuery(q);
-            setQP(p);
-          }}
-        />
-        <Content
-          query={queryString}
-          queryParams={queryParams}
-        />
-      </div>
-    </Router>
+    <div className="App">
+      <Search
+        initialSR = {queryString}
+        update = {(q, p) => {
+          setQuery(q);
+          setQP(p);
+        }}
+      />
+      <Content
+        query={queryString}
+        queryParams={queryParams}
+      />
+    </div>
   );
 }
 
