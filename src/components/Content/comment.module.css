@@ -7,11 +7,12 @@
 .author{
     font-weight: 600;
     display: flex;
+    align-items: center;
   }
   .op{
     color:aqua;
     font-weight:600;
-
+    margin-right:4px;
   }
   .more{
     color: rgba(255,255,255,0.9);
@@ -24,10 +25,9 @@
   .comment-time{
       font-weight: 400;
       font-size: 12px;
-      line-height: 100%;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      display: flex;
       padding-left: 10px;
+  }
+  .comment-text{
+    margin-top: 10px;
+    margin-bottom: 10px;
   }

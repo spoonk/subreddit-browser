@@ -11,10 +11,12 @@ const Post = ({ data, togglePost }) => {
   var richvideo = (data.post_hint === "rich:video") ? data.secure_media.oembed : null;
   var link = (data.post_hint === "link") ? data.url : null;
   var gallery = data.is_gallery;
+
   const utc = data.created_utc
   const [days, setDays] = useState(null)
   const [hours, setHours] = useState(null)
   const [minutes, setMinutes] = useState(null)
+  const post_flair = data.link_flair_text;
 
 // may need to make a special hostedvido component to play audio .... that sounds tricky
   // explanation: reddit hosted videos don't have any audio, you have to grab it from a separate stream
@@ -48,7 +50,6 @@ const Post = ({ data, togglePost }) => {
     handleTimes();
   }, [utc])
 
-
   return (
     <div className={styles.post} onClick={() => {togglePost(data)}}>
       <div className={`${styles["post-subreddit"]} ${styles["post-text"]}`}>
@@ -67,6 +68,17 @@ const Post = ({ data, togglePost }) => {
         <span style={{paddingRight: "10px"}} className={data.upvote_ratio > 0.5 ? "ups bad" : "ups good"}>{data.ups - data.downs}</span>
         {data.title}
       </div>
+      {post_flair && 
+        <div 
+          className="flair" 
+          style={{
+            backgroundColor: data["link_flair_background_color"] ? data["link_flair_background_color"] : "rgb(36, 253, 152)",
+            color: data["link_flair_text_color"] === "light" ? "white" : "black"
+          }}
+        >
+            {post_flair}
+          </div>
+      }
       {gallery && <h3>[gallery]</h3>}
       <div className={`${styles["post-author"]} ${styles["post-text"]}`}>
         {"u/"+data.author}

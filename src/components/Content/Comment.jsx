@@ -9,6 +9,7 @@ const Comment = ({ data, parentID }) => {
   const isMore = data.kind === "more";
   data = processCommentData(data);
   const replies = (isMore || data.replies === "" ) ? null : data.replies.data;
+  const post_flair = data.author_flair_text;
 
   const utc = data.created_utc
   const [days, setDays] = useState(null)
@@ -18,7 +19,7 @@ const Comment = ({ data, parentID }) => {
 
   useEffect(()=> {
     const handleTimes = () => {
-      const now = Math.round(Date.now() / 1000); // reddit measures time in seconds, whereas javascript measures time in milliseconds
+      const now = Math.round(Date.now() / 1000); 
       var diff = now - utc;
       var days = Math.floor(diff / (60 * 60 * 24));
       diff -= days * 60 * 60 * 24;
@@ -41,7 +42,18 @@ const Comment = ({ data, parentID }) => {
             <span className={styles["op"]}> OP </span> 
             : 
             <></>}
-          {"u/"+data.author}
+          <span className="comment-author">{"u/"+data.author}</span> 
+          {post_flair && 
+            <span
+              className="comment-flair" 
+              style={{
+                backgroundColor: data["author_flair_background_color"] ? data["author_flair_background_color"] : "rgb(36, 253, 152)",
+                color: data["author_flair_text_color"] === "light" ? "white" : "black"
+              }}
+            >
+                {post_flair}
+              </span>
+          }
           {days >= 1 ? 
             <div className={styles["comment-time"]}>{days} day{days !== 1 ? "s" : ""} ago</div>
             :
@@ -51,6 +63,7 @@ const Comment = ({ data, parentID }) => {
               <div className={styles["comment-time"]}>{minutes} min{minutes !== 1 ? "s" : ""} ago</div>  
           }
         </div>
+        
         <ReactMarkdown className={styles["comment-text"]}>{data.body}</ReactMarkdown>
         {data.score !== 1 && 
           <div className={data.score >= 0 ? "ups good" : "ups bad"}>

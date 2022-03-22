@@ -18,10 +18,6 @@ const ToggledPost = ({toggle, data}) => {
   const [hours, setHours] = useState(null)
   const [minutes, setMinutes] = useState(null)
 
-
-
-
-
   const [galleryContent, setGallery] = useState(gallery)
 
   const [comments, sCom] = useState(null)
@@ -80,7 +76,7 @@ const ToggledPost = ({toggle, data}) => {
 
     handleTimes();
   }, [data, gallery, utc])
-  
+
 
   return (
     <>

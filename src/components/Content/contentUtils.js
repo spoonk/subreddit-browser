@@ -10,7 +10,11 @@ export const processCommentData = (data) => {
         score: data.score,
         replies: data.replies,
         ups: data.ups,
-        downs: data.downs
+        downs: data.downs,
+        author_flair_background_color: data["author_flair_background_color"],
+        author_flair_text: data["author_flair_text"],
+        author_flair_text_color: data["author_flair_text_color"]
+
     }
     return data;
 }
@@ -43,7 +47,11 @@ export const processPostData = (data, setNMP, setAfter) => {
             name: l["name"],
             is_self: l["is_self"],
             id: l["id"],
-            is_gallery: l["is_gallery"]
+            is_gallery: l["is_gallery"],
+            link_flair_background_color: l["link_flair_background_color"],
+            link_flair_text: l["link_flair_text"],
+            link_flair_text_color: l["link_flair_text_color"],
+            link_flair_type: l["link_flair_type"]
         }
     })
     return listings;
