@@ -1,5 +1,5 @@
 .comment{
-    margin:10px;
+    margin:10px 0 0 10px;
     padding-left:10px;
     border-left:2px solid #606060;
     overflow-x:scroll;
@@ -23,11 +23,24 @@
     cursor: pointer;
   }
   .comment-time{
-      font-weight: 400;
-      font-size: 12px;
-      padding-left: 10px;
+    font-weight: 400;
+    font-size: 12px;
+    padding-left: 10px;
   }
   .comment-text{
     margin-top: 10px;
-    margin-bottom: 10px;
+  }
+  .comment-flair{
+    width:fit-content;
+    border-radius: 18px;
+    padding: 2px 10px 2px 10px;
+    /* margin: 10px 0px 10px 0px; */
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    filter:drop-shadow()
+  }
+  
+  .comment-author{
+    color: rgba(255,255,255,0.96);
   }

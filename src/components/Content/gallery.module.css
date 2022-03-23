@@ -1,0 +1,7 @@
+.gallery-container{
+    max-height:60vh !important;
+  }
+  .gallery-img{
+    width:auto !important;
+    max-height: 60vh;
+  }

@@ -3,8 +3,9 @@ import Post from "./Post";
 import { GridLayout } from "@egjs/react-infinitegrid";
 import { getInitialData, getMorePostData, } from "./contentUtils";
 import About from "./About";
-import styles from "./loader.module.css"
+import loaderstyles from "./loader.module.css"
 import ToggledPost from "./ToggledPost";
+import styles from "./postContent.module.css"
 
 const Content = ({query, queryParams}) => {
     const [posts, setPosts] = useState([]);
@@ -37,10 +38,10 @@ const Content = ({query, queryParams}) => {
     }
 
   return (
-    <div id="content">
+    <div className={styles["content"]}>
         {posts.length !== 0 && !error &&
             <GridLayout
-                className="grid"
+                className={styles["grid"]}
                 options={{ isConstantSize: false, transitionDuration: 0.2 }}
                 layoutOptions={{ margin: 10, align: "center" }}
                 onLayoutComplete = {() => {setLoading(false)}}
@@ -53,15 +54,15 @@ const Content = ({query, queryParams}) => {
                 })}
             </GridLayout>
         }
-        {error && <div className="error-fetching">Error fetching content, your query may be invalid. Make sure it is of the form "/r/subreddit"</div>}
+        {error && <div className={styles["error-fetching"]}>Error fetching content, your query may be invalid. Make sure it is of the form "/r/subreddit"</div>}
         {(!error &&  posts.length !== 0 && !noMorePosts) && 
             !loading ? 
-                <button className="getMore" onClick={!loading ? 
+                <button className={styles["getMore"]} onClick={!loading ? 
                     () => {getMorePostData(query, queryParams, after, timeout, setLoading, posts, setPosts, setError, setNMP, setAfter)}
                     : 
                     () => {}} >load more posts</button>
                 :
-                <div className="loadIndicator"><div class={styles["lds-roller"]}><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+                <div className={styles["loadIndicator"]}><div class={loaderstyles["lds-roller"]}><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
         }
 
         {postToggled && 

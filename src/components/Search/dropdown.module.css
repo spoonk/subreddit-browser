@@ -1,0 +1,40 @@
+
+.dropdown-button{
+    position: relative;
+    font-size:25px;
+    text-align: center;
+    border-bottom: 1px solid #242424;
+    padding: 0px 15px 0px 15px ;
+    margin: 0px 5px 0px 5px ;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.1s;
+    height: 100%;
+  }
+  
+  .dropdown-button:hover{
+    border-bottom: 1px solid rgb(36, 253, 152);
+    background-color: #363636;
+  }
+  
+  .dd-container{
+    font-size:20px;
+    position: absolute;
+    height: auto;
+    background-color: #242424;
+    cursor: pointer;
+    border: 1px solid gray;
+    transform: translate(-15%, 0);
+  }
+  
+  .dd-option{
+    z-index: 101;
+    text-align: center;
+    transition: 0.1s;
+    cursor: pointer;
+    padding:10px;
+  }
+  .dd-option:hover{
+    background-color: rgb(36, 253, 152);
+    color:#242424;
+  }

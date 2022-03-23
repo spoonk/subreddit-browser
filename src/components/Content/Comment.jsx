@@ -42,10 +42,10 @@ const Comment = ({ data, parentID }) => {
             <span className={styles["op"]}> OP </span> 
             : 
             <></>}
-          <span className="comment-author">{"u/"+data.author}</span> 
+          <span className={styles["comment-author"]}>{"u/"+data.author}</span> 
           {post_flair && 
             <span
-              className="comment-flair" 
+              className={styles["comment-flair"]}
               style={{
                 backgroundColor: data["author_flair_background_color"] ? data["author_flair_background_color"] : "rgb(36, 253, 152)",
                 color: data["author_flair_text_color"] === "light" ? "white" : "black"

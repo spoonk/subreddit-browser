@@ -23,13 +23,13 @@ const Post = ({ data, togglePost }) => {
 // https://v.redd.it/02alxg75i7j51/DASH_audio.mp4
   const video = (hostedvideo || richvideo) ?
         hostedvideo ?
-          <div className='rich-video'>
+          <div className={styles['rich-video']}>
           <video controls>
             <source src={hostedvideo.fallback_url}></source>
           </video>
           </div>
           :
-          <div className='rich-video' dangerouslySetInnerHTML={{__html: richvideo.html.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">")}}></div>
+          <div className={styles['rich-video']} dangerouslySetInnerHTML={{__html: richvideo.html.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">")}}></div>
       : null;
 
 
@@ -70,7 +70,7 @@ const Post = ({ data, togglePost }) => {
       </div>
       {post_flair && 
         <div 
-          className="flair" 
+          className={styles["flair"]}
           style={{
             backgroundColor: data["link_flair_background_color"] ? data["link_flair_background_color"] : "rgb(36, 253, 152)",
             color: data["link_flair_text_color"] === "light" ? "white" : "black"
@@ -99,7 +99,7 @@ const Post = ({ data, togglePost }) => {
               </>
             }
             {link && 
-                <a href={data.url} className="post-link" target="_blank" rel="noreferrer">{data.url}</a>
+                <a href={data.url} className={styles["post-link"]} target="_blank" rel="noreferrer">{data.url}</a>
             }
              { gallery && 
                 <img className={styles["post-img"]}  src={data.thumbnail} alt = "" />

@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
 import Comment from "./Comment";
 import styles from "./post.module.css"
+import tstyles from "./togglePost.module.css"
 import Gallery from "./Gallery";
 
 const ToggledPost = ({toggle, data}) => {
@@ -13,10 +14,12 @@ const ToggledPost = ({toggle, data}) => {
   var richvideo = (data.post_hint === "rich:video") ? data.secure_media.oembed : null;
   var link = (data.post_hint === "link") ? data.url : null;
   var gallery = data.is_gallery;
+
   const utc = data.created_utc
   const [days, setDays] = useState(null)
   const [hours, setHours] = useState(null)
   const [minutes, setMinutes] = useState(null)
+  const post_flair = data.link_flair_text;
 
   const [galleryContent, setGallery] = useState(gallery)
 
@@ -25,13 +28,13 @@ const ToggledPost = ({toggle, data}) => {
 
   const video = (hostedvideo || richvideo) ?
   hostedvideo ?
-    <div className='rich-video'>
+    <div className={styles['rich-video']}>
     <video controls>
       <source src={hostedvideo.fallback_url}></source>
     </video>
     </div>
     :
-    <div className='rich-video' dangerouslySetInnerHTML={{__html: richvideo.html.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">")}}></div>
+    <div className={styles['rich-video']} dangerouslySetInnerHTML={{__html: richvideo.html.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">")}}></div>
 : null;
 
   useEffect(() => {
@@ -81,7 +84,8 @@ const ToggledPost = ({toggle, data}) => {
   return (
     <>
     <div className="toggled-post-container" onClick={(e) => {if (e.target.className==="toggled-post-container") toggle(null);}}>
-        <div className="toggled-post">
+        <div className={tstyles["toggled-post"]}>
+          <div className="exit-button" onClick={(e) => {if (e.target.className==="exit-button") toggle(null);}}></div>
           <div className={`${styles["post-subreddit"]} ${styles["post-text"]}`}>
             {"r/"+data.subreddit} 
             <span style={{fontSize: "8px", paddingLeft:"10px", paddingRight:"10px"}}>●</span>
@@ -95,9 +99,20 @@ const ToggledPost = ({toggle, data}) => {
                 }
               </div>
               <div className={`${styles["post-title"]} ${styles["post-text"]}`} >
-                <span className={data.upvote_ratio > 0.5 ? "ups bad" : "ups good"}>{data.ups - data.downs}</span>
-                <ReactMarkdown >{data.title}</ReactMarkdown>
+                <span style={{paddingRight: "10px"}} className={data.upvote_ratio > 0.5 ? "ups bad" : "ups good"}>{data.ups - data.downs}</span>
+                {data.title}
               </div>
+              {post_flair && 
+                <div 
+                  className={styles["flair"]} 
+                  style={{
+                    backgroundColor: data["link_flair_background_color"] ? data["link_flair_background_color"] : "rgb(36, 253, 152)",
+                    color: data["link_flair_text_color"] === "light" ? "white" : "black"
+                  }}
+                >
+                    {post_flair}
+                  </div>
+              }
             <div className={`${styles["post-author"]} ${styles["post-text"]}`}>
               {"u/"+data.author}
             </div>
@@ -117,12 +132,11 @@ const ToggledPost = ({toggle, data}) => {
                     </>
                   }
                   {link && 
-                      <a href={data.url} className="post-link" target="_blank" rel="noreferrer">{data.url}</a>
+                      <a href={data.url} className={styles["post-link"]} target="_blank" rel="noreferrer">{data.url}</a>
                   }
                   { (gallery && (galleryContent === gallery)) && 
                       <img className={styles["post-img"]} style={{opacity: "0", height:"40%"}} src={data.thumbnail.replaceAll("&amp;", "&")} alt = "" />
                   }
-                  {/* galleries should only work in toggle posts */}
                   { (gallery && (galleryContent !== gallery)) && 
                       <Gallery content={galleryContent} thumbnail={data.thumbnail} />
                   }
@@ -130,9 +144,7 @@ const ToggledPost = ({toggle, data}) => {
               }
               {nsfw && !data.is_self && <div className={styles["nsfw"]}>Sorry, I'm not showing you nsfw content. Too bad!</div>}
             </div>
-            {/* <h1>{data.post_hint}</h1>  */}
-                  
-            <div className="comments">
+            <div>
               {comments && comments.length !== 0 && <>
               <hr></hr>
               <h2>Comments</h2>    

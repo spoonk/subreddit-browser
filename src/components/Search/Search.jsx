@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import SearchSuggestions from "./SearchSuggestions";
 import SearchDDButton from "./SearchDDButton";
+import styles from "./search.module.css"
 
 const Search = ({ update, initialSR  }) => {
     const [subreddit, setSR] = useState(initialSR);
@@ -40,9 +41,9 @@ const Search = ({ update, initialSR  }) => {
 
 
     return (
-        <div id="search-container">
-            <div id="search">
-                <form onSubmit={handleSubmit} id="search-bar">
+        <div className={styles["search-container"]}>
+            <div className={styles["search"]}>
+                <form onSubmit={handleSubmit} className={styles["search-bar"]}>
                     <input type="text" value={subreddit} onChange={changeSearch} onClick={() => {setSugg(true)}}/>
                 </form>
                 <SearchDDButton 

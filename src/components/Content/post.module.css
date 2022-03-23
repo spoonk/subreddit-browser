@@ -12,8 +12,6 @@
 
 .post-title{
     font-size:24px;
-    /* margin-top:10px; */
-    /* margin-bottom:5px; */
 }
 .selftext{
     overflow: hidden;
@@ -75,4 +73,22 @@
       display: flex;
       font-size: 12px;
       font-weight: 400;
+  }
+
+  .rich-video{
+    height: 105%;
+    width:100%;
+    position: absolute;
+    top:0px;
+  }
+  .flair{
+    width:fit-content;
+    border-radius: 18px;
+    padding: 4px 14px 4px 14px;
+    margin: 10px 0px 10px 0px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .post-link{
+    font-size: 15px;
   }
