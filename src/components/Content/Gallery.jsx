@@ -12,7 +12,7 @@ const Gallery = ({ content, thumbnail }) => {
             showThumbs={false}
         >
             {content.map(url => {
-                return <img className={styles['gallery-img']} src={url} alt="bleh" ></img>
+                return <img key={url} className={styles['gallery-img']} src={url} alt="bleh" ></img>
             })}
         </Carousel>
     </div>

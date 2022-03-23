@@ -56,7 +56,9 @@ const ToggledPost = ({toggle, data}) => {
     if (gallery){
       fetch(data.url.replaceAll("/gallery/", "/comments/") + ".json")
         .then(res => {
+          console.log(data)
           res.json().then(data => {
+            console.log(data)
             data = Object.values(data[0].data.children[0].data.media_metadata)
             data = data.map(dict => dict.s.u.replaceAll("&amp;", "&"))
             setGallery(data)
@@ -152,7 +154,7 @@ const ToggledPost = ({toggle, data}) => {
                   return comment.kind === "more" ? 
                     <></>
                     : 
-                    <Comment data={comment} key={comment.data.id} parentID={comment.data.id} />
+                    <Comment data={comment} key={comment.data.id + comment.data.created_utc} parentID={comment.data.id} />
                 })}
                 </>
               }

@@ -74,7 +74,7 @@ const Comment = ({ data, parentID }) => {
             return reply.kind === "more" ? 
               <> </> // unfortunately, I can't load more without being authenticated, which I'll do on the next iteration of this project (when I completely redo it with more features)
               : 
-                <Comment data={reply} key={reply.data.id} parentID={data.id} />
+                <Comment data={reply} key={reply.data.id + reply.data.created_utc} parentID={data.id} />
           })
         }
     </div>

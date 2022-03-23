@@ -62,7 +62,7 @@ const Content = ({query, queryParams}) => {
                     : 
                     () => {}} >load more posts</button>
                 :
-                <div className={styles["loadIndicator"]}><div class={loaderstyles["lds-roller"]}><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+                <div className={styles["loadIndicator"]}><div className={loaderstyles["lds-roller"]}><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
         }
 
         {postToggled && 
