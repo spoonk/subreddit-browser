@@ -54,7 +54,7 @@ const Content = ({query, queryParams}) => {
                 })}
             </GridLayout>
         }
-        {error && <div className={styles["error-fetching"]}>Error fetching content, your query may be invalid. Make sure it is of the form "/r/subreddit"</div>}
+        {error && <div className={styles["error-fetching"]}>Error fetching content, your query may be invalid. Make sure it is of the form "/r/subreddit". Also, if you're on Firefox you may want to try a different browser</div>}
         {(!error &&  posts.length !== 0 && !noMorePosts) && 
             !loading ? 
                 <button className={styles["getMore"]} onClick={!loading ? 
